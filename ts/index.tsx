@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import {UserForm} from './components/UserForm';
 
 const container = document.getElementById('contents');
 
 ReactDom.render(
-    <p>こんにちは、世界</p>,
-    container,
+    <UserForm name="a" />, container
 );
