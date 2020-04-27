@@ -6,6 +6,7 @@ export type Item = {
 };
 
 export const enum Color {
+  White = '#white',
   Red = '#red',
   Blue = '#blue',
   Green = '#green',

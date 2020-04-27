@@ -5,7 +5,7 @@ type State = {
   items : Item[];
 };
 
- const initialState: State ={
+ const initialState: State = {
    items: [
     {
       id : 0,
