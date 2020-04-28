@@ -8,7 +8,7 @@ const ItemForm: React.FC = () => {
   const dispatch = useDispatch();
 
   const [color, setColor] = useState<Color>(Color.White);
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<number | ''>('');
   const [name, setName] = useState<string>('');
 
   const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -26,11 +26,14 @@ const ItemForm: React.FC = () => {
 
   const handleSubmit = () => {
     dispatch(addItem({
-      id : 100,
+      id : Date.now(),
       name,
-      amount : (amount) ? amount : 0,
+      amount : (amount !== '') ? amount : 0,
       color,
-    }))
+    }));
+
+    setAmount('');
+    setName('');
   }
 
   return (

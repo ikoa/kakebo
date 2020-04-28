@@ -36,7 +36,7 @@ const apiTestModule = createSlice({
   }
 });
 
-export const {
+const {
   fetchStart, fetchSuccess, fetchFailure
 } = apiTestModule.actions;
 
