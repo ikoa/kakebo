@@ -1,30 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Dispatch } from 'react';
 
-const get = (keyword: string) => {
-  axios
-    .get(
-      `http://ws.audioscrobbler.com/2.0/?method=album.search&album=${keyword}&limit=12&api_key=${api_key}&format=json`,
-      {
-        responseType: "json"
-      }
-    )
-    .then(function(res) {
-      const result: Albummatches = qs.parse(res.data.results.albummatches);
-      const albms: Array<Album> = result.album;
-      console.log(albms);
-      albms.forEach(item => console.log(item.artist));
-      setRes(albms);
-    })
-    .catch(function(error) {
-      console.log("ERRRRRRRROR", error);
-      return [];
-    });
+const get = async () => {
+  const res = await fetch('https://qiita.com/api/v2/items');
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message);
+  return JSON.stringify(json);
 };
 
 type State = {
-  url: string;
+  loading: boolean;
+  res: string;
 };
 
 const initialState: State = {
-  url: 'https://lastfm.freetls.fastly.net/i/u/174s/248cb85037351002251836e5f2f0d76b.png',
+  loading : false,
+  res : 'init',
 };
+
+const apiTestModule = createSlice({
+  name : 'apitest',
+  initialState,
+  reducers : {
+    fetchStart(state: State, action: PayloadAction<string>) {
+      state.loading = true;
+    },
+    fetchSuccess(state: State, action: PayloadAction<string>) {
+      state.loading = false;
+      state.res = action.payload;
+    },
+    fetchFailure(state: State, action: PayloadAction<string>) {
+      state.loading = false;
+      state.res = action.payload;
+    }
+  }
+});
+
+export const {
+  fetchStart, fetchSuccess, fetchFailure
+} = apiTestModule.actions;
+
+export const fetchQiita = () => async (dispatch: Dispatch<any>) => {
+  try {
+    dispatch(fetchStart(''));
+    dispatch(fetchSuccess(await get()));
+  } catch (error) {
+    dispatch(fetchFailure(''));
+  }
+};
+
+export default apiTestModule;
