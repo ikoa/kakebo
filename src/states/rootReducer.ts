@@ -1,10 +1,10 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import itemsModule from './modules/itemsModule';
-import apiTestModule from './modules/apiTestModule';
+import itemListModule from './modules/itemListModule';
+import displayInfoModule from './modules/displayInfoModule';
 
 const rootReducer = combineReducers({
-  items: itemsModule.reducer,
-  apitest: apiTestModule.reducer,
+  items : itemListModule.reducer,
+  info : displayInfoModule.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

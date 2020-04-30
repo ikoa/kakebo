@@ -1,12 +1,12 @@
 import React from 'react';
-import ItemList from './components/item-list/ItemList';
-import ItemForm from './components/ItemForm';
+import KakeboBody from './components/body/KakeboBody';
+import KakeboHeader from './components/header/KakeboHeader';
 
 export const App = () => {
   return (
     <>
-      <ItemForm />
-      <ItemList />
+      <KakeboHeader/>
+      <KakeboBody />
     </>
   );
 }
