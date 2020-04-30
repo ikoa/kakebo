@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addYear, addMonth, addDate } from '../../../states/modules/itemListModule';
-import { Day, Year } from '../../../states/models';
+import { addYear, addMonth, addDate, addItem } from '../../../states/modules/itemListModule';
+import { Day, Year, Item } from '../../../states/models';
 import { RootState } from '../../../states/rootReducer';
 
 const KakeboForm: React.FC<{
@@ -43,8 +43,16 @@ const KakeboForm: React.FC<{
   };
 
   const handleSubmit = () => {
-
-    setAmount(date.y);
+    const newItem: Item = {
+      ad: date.y,
+      monthNum: date.m,
+      date : date.d,
+      id : new Date().getTime(),
+      name,
+      amount : amount === '' ? 0 : amount,
+    }
+    dispatch(addItem(newItem));
+    setAmount('');
     setName('');
   };
 
@@ -66,6 +74,13 @@ const KakeboForm: React.FC<{
         <input value={date.d} type="number" onChange={handleDateChange}/>
         <button onClick={() => {dispatch(addDate({ad: date.y, monthNum: date.m, date: date.d}))}}>
           addD
+        </button>
+      </div>
+      <div>
+        <input value={name} type="text" onChange={handleNameChange}/>
+        <input value={amount} type="number" onChange={handleAmountChange}/>
+        <button onClick={handleSubmit}>
+          addItem
         </button>
       </div>
     </>

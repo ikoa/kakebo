@@ -134,6 +134,38 @@ const itemListModule = createSlice({
         ...state,
         years : updatedYears,
       }
+    },
+    addItem(state: State, action: PayloadAction<Item>) {
+      const item = action.payload;
+      const targetY = state.years.find(y => y.ad === item.ad);
+      if (targetY === undefined) return;
+      const targetM = targetY.months.find(m => m.monthNum === item.monthNum);
+      if (targetM === undefined) return;
+      const targetD = targetM.days.find(d => d.date === item.date);
+      if (targetD === undefined) return;
+      if (targetD.items.find(i => i.id === item.id)) return;
+
+      const updatedDay: Day = {
+        ...targetD,
+        items : [item, ...targetD.items]
+      };
+      const updatedMonth: Month = {
+        ...targetM,
+        days : targetM.days.map(d => {
+          return d.date === item.date ? updatedDay : d;
+        }),
+      };
+
+      const updatedMonthList: Month[] = targetY.months.map(m => {
+        return m.monthNum === action.payload.monthNum ? updatedMonth : m;
+      });
+      const updatedYears : Year[] = state.years.map(y => {
+        return y.ad === action.payload.ad ? {...y, months : updatedMonthList} : y;
+      });
+      return {
+        ...state,
+        years : updatedYears,
+      }
     }
   }
 });
@@ -142,6 +174,7 @@ export const {
   addYear,
   addMonth,
   addDate,
+  addItem,
 } = itemListModule.actions;
 
 export default itemListModule;
