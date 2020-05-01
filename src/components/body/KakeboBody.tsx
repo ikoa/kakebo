@@ -13,12 +13,12 @@ const KakeboBody: React.FC = () => {
   return (
     <>
       <KakeboGraph
-        year={info.displayInfo.displayYear}
-        month={info.displayInfo.displayMonth}
+        year={info.displayYear}
+        month={info.displayMonth}
       />
       <KakeboForm
-        year={info.displayInfo.displayYear}
-        initMonth={info.displayInfo.displayMonth}
+        year={info.displayYear}
+        initMonth={info.displayMonth}
       />
       {items.years.map(y =>
         <div key={y.ad}>

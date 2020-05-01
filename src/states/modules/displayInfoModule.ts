@@ -2,14 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DisplayInfo } from '../models';
 
 type State = {
-  displayInfo: DisplayInfo;
+  displayYear: number,
+  displayMonth: number,
 };
 
 const initialState: State = {
-  displayInfo: {
-    displayYear: new Date().getFullYear(),
-    displayMonth: new Date().getMonth()+1,
-  },
+  displayYear: new Date().getFullYear(),
+  displayMonth: new Date().getMonth()+1,
 }
 
 const displayInfoModule = createSlice({
@@ -17,10 +16,10 @@ const displayInfoModule = createSlice({
   initialState,
   reducers : {
     init(state : State) {
-      state.displayInfo = initialState.displayInfo;
+      state = initialState;
     },
     change(state : State, action: PayloadAction<DisplayInfo>) {
-      state.displayInfo = action.payload;
+      state = action.payload;
     },
   }
 });
