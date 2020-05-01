@@ -89,26 +89,7 @@ const itemListModule = createSlice({
       if (targetY === undefined) {
         return {
           ...state,
-          years : [
-            ...state.years,
-            {
-              ad : item.ad,
-              months : [
-                {
-                  ad : item.ad,
-                  monthNum : item.monthNum,
-                  days : [
-                    {
-                      ad : item.ad,
-                      monthNum : item.monthNum,
-                      date : item.date,
-                      items : [item]
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
+          years : createYearAndUpdateYears(state.years, item),
         }
       }
 
@@ -122,7 +103,7 @@ const itemListModule = createSlice({
             state.years,
             targetY,
             item,
-          )
+          ),
         };
       }
 
@@ -130,63 +111,29 @@ const itemListModule = createSlice({
 
       // Dayから新たに作成
       if (targetD === undefined) {
-        const newDay: Day = {
-          ad: item.ad,
-          monthNum : item.monthNum,
-          date : item.date,
-          items : [item],
-        };
-
-        const updatedMonth: Month = {
-          ...targetM,
-          days : [
-            newDay,
-            ...targetM.days
-          ],
-        };
-        const updatedMonthList: Month[] = targetY.months.map(m => {
-          return m.monthNum === updatedMonth.monthNum ? updatedMonth : m;
-        });
-
-        const updatedYear: Year = {
-          ...targetY,
-          months : updatedMonthList,
-        }
-
-        const updatedYears: Year[] = state.years.map(y => {
-          return y.ad === updatedYear.ad ? updatedYear : y;
-        });
-
         return {
           ...state,
-          years : updatedYears,
+          years : createDayAndUpdateYears(
+            state.years,
+            targetY,
+            targetM,
+            item,
+          ),
         }
       }
 
       // すでに同じitemがある場合は何も作成しない
       if (targetD.items.find(i => i.id === item.id)) return;
 
-      // 指定されたDayを更新
-      const updatedDay: Day = {
-        ...targetD,
-        items : [item, ...targetD.items]
-      };
-      const updatedMonth: Month = {
-        ...targetM,
-        days : targetM.days.map(d => {
-          return d.date === item.date ? updatedDay : d;
-        }),
-      };
-
-      const updatedMonthList: Month[] = targetY.months.map(m => {
-        return m.monthNum === action.payload.monthNum ? updatedMonth : m;
-      });
-      const updatedYears : Year[] = state.years.map(y => {
-        return y.ad === action.payload.ad ? {...y, months : updatedMonthList} : y;
-      });
       return {
         ...state,
-        years : updatedYears,
+        years : updateDayAndUpdateYears(
+          state.years,
+          targetY,
+          targetM,
+          targetD,
+          item,
+        ),
       }
     },
     deleteItem(state: State, action: PayloadAction<Item>) {
@@ -222,9 +169,30 @@ const itemListModule = createSlice({
   }
 });
 
+const createYearAndUpdateYears = (
+  years: Year[], item: Item
+): Year[] => {
+  return [
+    ...years,
+    {
+      ad : item.ad,
+      months : [{
+        ad : item.ad,
+        monthNum : item.monthNum,
+        days : [{
+          ad : item.ad,
+          monthNum : item.monthNum,
+          date : item.date,
+          items : [item]
+        }]
+      }]
+    }
+  ];
+};
+
 const createMonthAndUpdeteYears = (
   years: Year[] ,targetY: Year, item: Item
-):Year[] => {
+): Year[] => {
   const newMonth: Month = {
     ad : item.ad,
     monthNum : item.monthNum,
@@ -247,6 +215,70 @@ const createMonthAndUpdeteYears = (
   });
 
   return updatedYears;
+};
+
+const createDayAndUpdateYears = (
+  years: Year[],
+  targetY: Year,
+  targetM: Month,
+  item: Item,
+): Year[] => {
+  const newDay: Day = {
+    ad: item.ad,
+    monthNum : item.monthNum,
+    date : item.date,
+    items : [item],
+  };
+
+  const updatedMonth: Month = {
+    ...targetM,
+    days : [
+      newDay,
+      ...targetM.days
+    ],
+  };
+  const updatedMonthList: Month[] = targetY.months.map(m => {
+    return m.monthNum === updatedMonth.monthNum ? updatedMonth : m;
+  });
+
+  const updatedYear: Year = {
+    ...targetY,
+    months : updatedMonthList,
+  }
+
+  const updatedYears: Year[] = years.map(y => {
+    return y.ad === updatedYear.ad ? updatedYear : y;
+  });
+
+  return updatedYears;
+};
+
+const updateDayAndUpdateYears = (
+  years: Year[],
+  targetY: Year,
+  targetM: Month,
+  targetD: Day,
+  item: Item,
+): Year[] => {
+  const updatedDay: Day = {
+    ...targetD,
+    items : [item, ...targetD.items]
+  };
+  const updatedMonth: Month = {
+    ...targetM,
+    days : targetM.days.map(d => {
+      return d.date === item.date ? updatedDay : d;
+    }),
+  };
+
+  const updatedMonthList: Month[] = targetY.months.map(m => {
+    return m.monthNum === updatedMonth.monthNum ? updatedMonth : m;
+  });
+  const updatedYears : Year[] = years.map(y => {
+    return y.ad === targetY.ad ? {...y, months : updatedMonthList} : y;
+  });
+
+    return updatedYears;
 };
 
 export const {
