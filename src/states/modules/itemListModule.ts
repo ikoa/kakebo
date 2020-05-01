@@ -116,30 +116,13 @@ const itemListModule = createSlice({
 
       // Monthから新たに作成
       if (targetM === undefined) {
-        const newMonth: Month = {
-          ad : item.ad,
-          monthNum : item.monthNum,
-          days : [{
-            ad : item.ad,
-            monthNum : item.monthNum,
-            date : item.date,
-            items : [item],
-          }]
-        };
-        const updatedYear: Year = {
-          ...targetY,
-          months : [
-            newMonth,
-            ...targetY.months
-          ]
-        };
-        const updatedYears: Year[] = state.years.map(y => {
-          return y.ad === updatedYear.ad ? updatedYear : y;
-        });
-
         return {
           ...state,
-          years : updatedYears
+          years : createMonthAndUpdeteYears(
+            state.years,
+            targetY,
+            item,
+          )
         };
       }
 
@@ -239,7 +222,7 @@ const itemListModule = createSlice({
   }
 });
 
-const createNewYearAndUpdeteMonth = (
+const createMonthAndUpdeteYears = (
   years: Year[] ,targetY: Year, item: Item
 ):Year[] => {
   const newMonth: Month = {
