@@ -12,7 +12,7 @@ const KakeboForm: React.FC<{
   initMonth,
 }) => {
   const dispatch = useDispatch();
-  // const {items} = useSelector((state: RootState) => state);
+  const {items} = useSelector((state: RootState) => state);
 
   const [date, setDate] = useState<{y:number,m:number,d:number}>({
     y: year,
@@ -50,7 +50,8 @@ const KakeboForm: React.FC<{
       id : new Date().getTime(),
       name,
       amount : amount === '' ? 0 : amount,
-    }
+    };
+
     dispatch(addItem(newItem));
     setAmount('');
     setName('');
