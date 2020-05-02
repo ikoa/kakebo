@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
-import KakeboGraph from './graph/KakeboGraph';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../states/rootReducer';
-import { addYear } from '../../states/modules/itemListModule';
-import { Year, Day } from '../../states/models';
+import { Year } from '../../states/models';
+import KakeboGraph from './graph/KakeboGraph';
 import KakeboForm from './form/KakeboForm';
 import YearItemList from './list/YearItemList';
 
 const KakeboBody: React.FC = () => {
   const {info, items} = useSelector((state: RootState) => state);
+  const [displayItem, setDisplayItem] = useState<Year | null>(() =>
+    items.years.find(i => i.ad === info.displayYear) ?? null
+  );
+
+  useEffect(() => {
+    setDisplayItem(items.years.find(i => i.ad === info.displayYear) ?? null);
+  },[info, items]);
 
   return (
     <>
@@ -20,12 +26,9 @@ const KakeboBody: React.FC = () => {
         year={info.displayYear}
         initMonth={info.displayMonth}
       />
-      {items.years.map(y =>
-        <div key={y.ad}>
-          {y.ad + '年'}
-          <YearItemList item={y} />
-        </div>
-      )}
+      {displayItem !== null &&
+        <YearItemList item={displayItem} />
+      }
     </>
   );
 };

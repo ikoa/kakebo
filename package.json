@@ -9,9 +9,8 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.12",
+    "@material-ui/pickers": "^3.2.10",
     "@reduxjs/toolkit": "^1.3.5",
-    "@types/chart.js": "^2.9.20",
-    "@types/qs": "^6.9.1",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
     "qs": "^6.9.3",
@@ -20,15 +19,15 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "styled-components": "^5.1.0",
-    "uuid": "^7.0.3"
+    "styled-components": "^5.1.0"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.20",
+    "@types/qs": "^6.9.1",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/react-redux": "^7.1.7",
     "@types/redux": "^3.6.0",
-    "@types/uuid": "^7.0.3",
     "electron": "^8.2.3",
     "ts-loader": "^7.0.1",
     "tslint": "^6.1.1",

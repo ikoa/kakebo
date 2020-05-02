@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addYear, addMonth, addDate, addItem } from '../../../states/modules/itemListModule';
 import { Day, Year, Item } from '../../../states/models';
 import { RootState } from '../../../states/rootReducer';
+import { DatePicker } from '@material-ui/pickers';
+import {Input} from '@material-ui/core';
 
 const KakeboForm: React.FC<{
   year: number,
@@ -56,27 +58,14 @@ const KakeboForm: React.FC<{
     setAmount('');
     setName('');
   };
-
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+    new Date('2014-08-18T21:11:54'),
+  );
+  const handleDateChange2 = (date: Date | null) => {
+    setSelectedDate(date);
+  };
   return (
     <>
-      <div>
-        <input value={date.y} type="number" onChange={handleYearChange}/>
-        <button onClick={() => {dispatch(addYear(date.y))}}>
-          addY
-        </button>
-      </div>
-      <div>
-        <input value={date.m} type="number" onChange={handleMonthChange}/>
-        <button onClick={() => {dispatch(addMonth({ad: date.y, monthNum: date.m}))}}>
-          addM
-        </button>
-      </div>
-      <div>
-        <input value={date.d} type="number" onChange={handleDateChange}/>
-        <button onClick={() => {dispatch(addDate({ad: date.y, monthNum: date.m, date: date.d}))}}>
-          addD
-        </button>
-      </div>
       <div>
         <input value={name} type="text" onChange={handleNameChange}/>
         <input value={amount} type="number" onChange={handleAmountChange}/>
